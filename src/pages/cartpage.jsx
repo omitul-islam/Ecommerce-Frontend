@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchCart, updateCart } from "../services/cartService"; 
 import { createOrder } from "../services/orderService";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const CartPage = () => {
   const [cart, setCart] = useState([]);
@@ -63,7 +64,14 @@ const CartPage = () => {
   
       if (response) {
         console.log("Order placed successfully:", response);
-        navigate("/order-confirmation");
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your order has been placed successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          navigate("/order-confirmation");
+        });
       } else {
         console.error("Order creation failed: ", response?.message || "Unknown error");
       }
@@ -125,21 +133,23 @@ const CartPage = () => {
           })}
         </div>
       )}
-      <div className="mt-4">
-        <input
-          type="text"
-          placeholder="Enter your address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}  
-          className="px-4 py-2 border rounded w-full"
-        />
-        <button
-          onClick={handlePlaceOrder}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Place Order
-        </button>
-      </div>
+      {cart.length > 0 && (
+        <div className="mt-4">
+          <input
+            type="text"
+            placeholder="Enter your address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}  
+            className="px-4 py-2 border rounded w-full"
+          />
+          <button
+            onClick={handlePlaceOrder}
+            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Place Order
+          </button>
+        </div>
+      )}
     </div>
   );
 };
