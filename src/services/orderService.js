@@ -31,22 +31,78 @@ export const createOrder = async (orderDetails) => {
   }
 };
 
-export const getOrders = async () => {
-  const token = localStorage.getItem('token');
+export const getOrders = async (isAdmin) => {
+  const token = localStorage.getItem("token");
 
   if (!token) {
-    throw new Error('No authentication token found. Please log in again.');
+    throw new Error("No authentication token found. Please log in again.");
   }
 
   try {
-    const response = await api.get('/v1/order', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    });
-    return response.data;
+    if (isAdmin === true) {
+    //console.log("Yes admin")  
+      const response = await api.get('/admin/order', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+    //console.log("ekhanei ",response.data.Orders)
+      return response.data;
+    } else {
+      const response = await api.get('/v1/order', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      return response.data;
+    }
   } catch (error) {
-    console.error('Error fetching orders:', error.response?.data || error.message);
+    console.error("Error fetching orders:", error.response?.data || error.message);
     throw error;
   }
 };
+
+export const updateOrder = async (orderId, updatedDetails) => {
+    const token = localStorage.getItem('token');
+    console.log(updatedDetails)
+  
+    if (!token) {
+      throw new Error('No authentication token found. Please log in again.');
+    }
+  
+    try {
+      const response = await api.patch(
+        `/admin/order/${orderId}`,
+        updatedDetails,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error updating order:', error.response?.data || error.message);
+      throw error;
+    }
+  };
+  
+  export const deleteOrder = async (orderId) => {
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      throw new Error('No authentication token found. Please log in again.');
+    }
+  
+    try {
+      const response = await api.delete(`/admin/order/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting order:', error.response?.data || error.message);
+      throw error;
+    }
+  };

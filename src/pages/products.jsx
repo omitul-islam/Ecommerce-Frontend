@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { addToCart, fetchCart } from "../services/cartService";
 import { getProducts, deleteProduct, updateProduct } from "../services/productService";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../services/userService";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [editProductId, setEditProductId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     name: "",
@@ -21,6 +23,19 @@ const ProductList = () => {
   useEffect(() => {
     fetchProducts();
     fetchCartCount();
+    const loadUser = async () => {
+          try {
+            const user = await getUser();
+            console.log(user.user);
+            if (user?.user.role === 'admin') {
+              setIsAdmin(true);
+            }
+          } catch (error) {
+            console.error("Failed to fetch user profile:", error);
+          }
+        };
+
+     loadUser();   
   }, []);
 
   const fetchProducts = async () => {
@@ -194,18 +209,22 @@ const ProductList = () => {
                   <h3 className="text-xl font-semibold">{product.name}</h3>
                   <p className="text-green-500 font-semibold">${product.price}</p>
                   <div className="flex gap-2 mt-2">
-                    <button
-                      className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                      onClick={() => handleEdit(product)}
-                    >
-                      Update
-                    </button>
-                    <button
-                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                      onClick={() => handleDelete(product._id)}
-                    >
-                      Delete
-                    </button>
+                  {isAdmin && (
+                <div className="flex gap-2 mt-2">
+                <button
+                    className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                    onClick={() => handleEdit(product)}
+                >
+                    Update
+                </button>
+                <button
+                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                    onClick={() => handleDelete(product._id)}
+                >
+                    Delete
+                </button>
+                </div>
+                )}
                   </div>
                   <button
                     className="mt-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition w-full"

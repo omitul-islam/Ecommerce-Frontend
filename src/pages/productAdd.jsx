@@ -47,7 +47,7 @@ const ProductManager = () => {
     }
 
     try {
-    //   console.log(">>>>>>>>>>>>>>>>>",productData)  
+    //console.log(">>>>>>>>>>>>>>>>>",productData)  
       await createProduct(productData);
       setSuccessMessage("Product created successfully!");
       setFormData({

@@ -1,20 +1,104 @@
 import React, { useState, useEffect } from "react";
-import { getOrders } from "../services/orderService";  
+import { getOrders, updateOrder, deleteOrder } from "../services/orderService";
+import { getUser } from "../services/userService";  
+import Swal from 'sweetalert2';
 
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
-
+  const [isAdmin, setIsAdmin] = useState(false);
+  
   useEffect(() => {
-    const loadOrders = async () => {
+   
+
+    const loadUser = async () => {
       try {
-        const ordersData = await getOrders();
-        setOrders(ordersData.orders || []);
+        const user = await getUser();
+        if (user?.user.role === 'admin') {
+          setIsAdmin(true);
+        }
       } catch (error) {
-        console.error("Failed to fetch orders:", error);
+        console.error("Failed to fetch user profile:", error);
       }
     };
+    const loadOrders = async () => {
+        try {
+          const user = await getUser();
+          const ordersData = await getOrders(user?.user.role === 'admin');
+          setOrders(ordersData.orders || []);
+        } catch (error) {
+          console.error("Failed to fetch orders:", error);
+        }
+      };
+    loadUser();
     loadOrders();
   }, []);
+
+  const handleUpdateOrder = async (orderId) => {
+    const updatedDetails = {
+      status: "confirmed",
+    };
+
+    try {
+      setLoading(true);
+      const updatedOrder = await updateOrder(orderId, updatedDetails);
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, ...updatedOrder } : order
+        )
+      );
+      Swal.fire({
+        title: 'Success!',
+        text: 'Order has been Confirmed.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+    } catch (error) {
+      console.error("Error updating order:", error.message);
+      Swal.fire({
+        title: 'Error!',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        setLoading(true);
+        await deleteOrder(orderId);
+        setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'Your order has been deleted.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+      } catch (error) {
+        console.error("Error deleting order:", error.message);
+        Swal.fire({
+          title: 'Error!',
+          text: error.message,
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <div className="p-4">
@@ -50,6 +134,22 @@ const OrderPage = () => {
                   </div>
                 ))}
               </div>
+              {isAdmin && (
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleUpdateOrder(order._id)}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    onClick={() => handleDeleteOrder(order._id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
