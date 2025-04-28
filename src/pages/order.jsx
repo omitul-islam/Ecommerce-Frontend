@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [loading,setLoading] = useState(false);
   
   useEffect(() => {
    
@@ -25,6 +26,7 @@ const OrderPage = () => {
           const user = await getUser();
           const ordersData = await getOrders(user?.user.role === 'admin');
           setOrders(ordersData.orders || []);
+          console.log(">>>>>>>>>",ordersData.orders);
         } catch (error) {
           console.error("Failed to fetch orders:", error);
         }
@@ -113,7 +115,8 @@ const OrderPage = () => {
               className="p-4 border rounded shadow flex justify-between items-center"
             >
               <div>
-                <h3 className="text-lg font-semibold">Order ID: {order._id}</h3>
+                <h3 className="text-lg font-bold">Order ID: {order._id}</h3>
+                <p className="text-gray-600 font-semibold">Username: {(order.user.username)}</p>
                 <p className="text-gray-600">Total Amount: ${(order.totalAmount).toFixed(2)}</p>
                 <p className="text-gray-600">Status: {order.status}</p>
                 <p className="text-gray-600">Address: {order.address}</p>
@@ -122,9 +125,9 @@ const OrderPage = () => {
                 {order.products.map((product, index) => (
                   <div key={index} className="flex items-center space-x-2">
                     <img
-                      src={`http://localhost:3000${product.image}`}
-                      alt={product.name}
-                      className="w-12 h-12 object-cover rounded-md"
+                    src={`http://localhost:3000${product.productId.image}`}
+                    alt={product.name}
+                    className="w-18 h-18 object-cover rounded mb-4"
                     />
                     <p className="text-gray-600">{product.name}</p>
                     <p className="text-gray-600">Quantity: {product.quantity}</p>

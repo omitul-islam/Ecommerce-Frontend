@@ -207,7 +207,9 @@ const ProductList = () => {
                     className="w-full h-48 object-cover rounded mb-4"
                   />
                   <h3 className="text-xl font-semibold">{product.name}</h3>
-                  <p className="text-green-500 font-semibold">${product.price}</p>
+                  <p className="text-green-500 font-semibold">Price: ${product.price}</p>
+                  <p className="text-green-400 font-semibold">Category: {product.category}</p>
+                  <p className="text-black-400 font-semibold">Stock: {product.stock}</p>
                   <div className="flex gap-2 mt-2">
                   {isAdmin && (
                 <div className="flex gap-2 mt-2">

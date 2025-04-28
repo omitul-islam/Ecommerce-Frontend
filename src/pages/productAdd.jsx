@@ -57,6 +57,7 @@ const ProductManager = () => {
         stock: "",
         image: null,
       });
+      alert('The product is added successfully!');
       navigate("/products");
     } catch (error) {
       console.error("Error creating product:", error);
