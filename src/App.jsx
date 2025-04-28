@@ -8,6 +8,7 @@ import ProductManager from "./pages/productAdd";
 import OrderPage from "./pages/order";
 import { getUser } from "./services/userService";
 import PrivateRoute from "./guard/privateRoute";
+import Users from "./pages/users";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -43,6 +44,22 @@ function App() {
             <Link to="/add-product">
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
                 Add Product
+              </button>
+            </Link>
+            )}
+
+            {token && isAdmin && (
+            <Link to="/order-confirmation">
+              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                Orders
+              </button>
+            </Link>
+            )}
+
+            {token && isAdmin && (
+            <Link to="/users">
+              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                Users
               </button>
             </Link>
             )}
@@ -83,6 +100,11 @@ function App() {
           </PrivateRoute>
           } />
         <Route path="/order-confirmation" element={<OrderPage />} />
+        <Route path="/users" element={
+          <PrivateRoute>
+            <Users />
+          </PrivateRoute>
+          } />
       </Routes>
     </div>
   );
