@@ -5,6 +5,7 @@ import ProductList from "./pages/products";
 import LoginPage from "./pages/login";
 import CartPage from "./pages/cartpage";
 import ProductManager from "./pages/productAdd";
+import OrderPage from "./pages/order";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -53,7 +54,8 @@ function App() {
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/add-product" element={<ProductManager />} /> 
+        <Route path="/add-product" element={<ProductManager />} />
+        <Route path="/order-confirmation" element={<OrderPage />} />
       </Routes>
     </div>
   );

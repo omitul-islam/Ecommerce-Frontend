@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { fetchCart, updateCart } from "../services/cartService";
+import { fetchCart, updateCart } from "../services/cartService"; 
+import { createOrder } from "../services/orderService";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+  const [address, setAddress] = useState(""); 
 
   useEffect(() => {
     const loadCart = async () => {
@@ -13,10 +17,8 @@ const CartPage = () => {
   }, []);
 
   const handleUpdateCart = async (productId, quantity) => {
-    console.log("Updating Cart with ProductId:", productId, "Quantity:", quantity);
     try {
       const response = await updateCart(productId, quantity);
-      console.log("Updated Cart Response:", response);
       setCart(response.cart.items);
     } catch (error) {
       console.error("Failed to update cart", error);
@@ -39,6 +41,37 @@ const CartPage = () => {
     }
   };
 
+  const handlePlaceOrder = async () => {
+    try {
+      const orderDetails = {
+        products: cart
+          .filter(item => item.product && item.product._id)
+          .map(item => ({
+            productId: item.product._id,
+            quantity: item.quantity,
+            price: item.price
+          })),
+        totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        address: address, 
+      };
+  
+      if (orderDetails.products.length === 0) {
+        throw new Error("No valid products in the cart.");
+      }
+  
+      const response = await createOrder(orderDetails);
+  
+      if (response) {
+        console.log("Order placed successfully:", response);
+        navigate("/order-confirmation");
+      } else {
+        console.error("Order creation failed: ", response?.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error.message || error);
+    }
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
@@ -50,17 +83,24 @@ const CartPage = () => {
             const productId =
               typeof item.product === "object" ? item.product?._id : item.product;
 
-            if (!productId) {
+            if (!item.product) {
               return null;
             }
 
-            console.log("Rendering item with Product ID:", productId);
             return (
               <div
                 key={productId || `fallback-key-${index}`} 
                 className="p-4 border rounded shadow flex justify-between items-center"
               >
                 <div>
+                  {item.product.image && (
+                    <img
+                      src={`http://localhost:3000${item.product.image}`}
+                      alt={item.product.name}
+                      className="w-20 h-20 object-cover rounded-md"
+                    />
+                  )}
+                  <p className="text-gray-600">Name: {item.product.name}</p>
                   <p className="text-gray-600">Quantity: {item.quantity}</p>
                   <p className="text-green-500 font-semibold">
                     Price: ${(item.price * item.quantity).toFixed(2)}
@@ -85,6 +125,21 @@ const CartPage = () => {
           })}
         </div>
       )}
+      <div className="mt-4">
+        <input
+          type="text"
+          placeholder="Enter your address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}  
+          className="px-4 py-2 border rounded w-full"
+        />
+        <button
+          onClick={handlePlaceOrder}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Place Order
+        </button>
+      </div>
     </div>
   );
 };
