@@ -52,4 +52,22 @@ export const updateCart = async (productId, quantity) => {
       throw error;
     }
   };
+
+  export const clearCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.delete(
+        `/cart/item`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data; 
+    } catch (error) {
+      console.error("Error deleting cart:", error.message);
+      throw error;
+    }
+  };
   

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchCart, updateCart } from "../services/cartService"; 
+import { clearCart, fetchCart, updateCart } from "../services/cartService"; 
 import { createOrder } from "../services/orderService";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
@@ -80,6 +80,29 @@ const CartPage = () => {
     }
   };
 
+  
+  const handleClearCart = async () => {
+    try {
+      await clearCart(); 
+      setCart([]);
+      Swal.fire({
+        title: 'Success!',
+        text: 'Your cart has been cleared.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+    } catch (error) {
+      console.error("Error deleting cart:", error.message);
+      Swal.fire({
+        title: 'Error!',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  };
+
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
@@ -142,12 +165,20 @@ const CartPage = () => {
             onChange={(e) => setAddress(e.target.value)}  
             className="px-4 py-2 border rounded w-full"
           />
-          <button
+         <div className="flex flex-col gap-y-3 w-1/8">
+         <button
             onClick={handlePlaceOrder}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             Place Order
           </button>
+          <button
+            onClick={handleClearCart}
+            className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Clear Cart
+          </button>
+         </div>
         </div>
       )}
     </div>
