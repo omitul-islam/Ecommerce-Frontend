@@ -54,6 +54,10 @@ const OrderPage = () => {
         icon: 'success',
         confirmButtonText: 'OK',
       });
+      setTimeout(() => {
+      window.location.reload(); 
+      }, 2000);
+      
     } catch (error) {
       console.error("Error updating order:", error.message);
       Swal.fire({

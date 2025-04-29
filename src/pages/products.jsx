@@ -79,13 +79,14 @@ const ProductList = () => {
   };
 
   const handleEdit = (product) => {
+    console.log('product',product);
     setEditProductId(product._id);
     setEditFormData({
       name: product.name,
       price: product.price,
       category: product.category,
       stock: product.stock,
-      image: null,
+      image: product.image,
     });
   };
 
