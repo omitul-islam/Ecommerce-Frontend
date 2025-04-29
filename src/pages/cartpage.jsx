@@ -126,7 +126,7 @@ const CartPage = () => {
                 <div>
                   {item.product.image && (
                     <img
-                      src={`http://localhost:3000${item.product.image}`}
+                      src={`https://ecommerce-backend-wm9g.onrender.com${product.productId.image}`}
                       alt={item.product.name}
                       className="w-20 h-20 object-cover rounded-md"
                     />
