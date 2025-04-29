@@ -88,25 +88,36 @@ function App() {
         </div>
       </div>
 
-      <Routes>
-        <Route path="/" element={<ProductList />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/products" element={<ProductList />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/add-product" element={
-          <PrivateRoute>
-            <ProductManager />
-          </PrivateRoute>
-          } />
-        <Route path="/order-confirmation" element={<OrderPage />} />
-        <Route path="/users" element={
-          <PrivateRoute>
-            <Users />
-          </PrivateRoute>
-          } />
-      </Routes>
-    </div>
+  <Routes>
+  {!token ? (
+    <>
+      <Route path="/" element={<ProductList />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegistrationPage />} />
+    </>
+  ) : (
+    <>
+      <Route path="/" element={<ProductList />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegistrationPage />} />
+      <Route path="/products" element={<ProductList />} />
+      <Route path="/cart" element={<CartPage />} />
+      <Route path="/add-product" element={
+        <PrivateRoute>
+          <ProductManager />
+        </PrivateRoute>
+      } />
+      <Route path="/order-confirmation" element={<OrderPage />} />
+      <Route path="/users" element={
+        <PrivateRoute>
+          <Users />
+        </PrivateRoute>
+      } />
+    </>
+  )}
+</Routes>
+
+  </div>
   );
 }
 
