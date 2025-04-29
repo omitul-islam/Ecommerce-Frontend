@@ -45,19 +45,17 @@ const OrderPage = () => {
       const updatedOrder = await updateOrder(orderId, updatedDetails);
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
-          order._id === orderId ? { ...order, ...updatedOrder } : order
+          order._id === orderId ? { ...order, status: "confirmed" } : order
         )
       );
+      
       Swal.fire({
         title: 'Success!',
         text: 'Order has been Confirmed.',
         icon: 'success',
         confirmButtonText: 'OK',
       });
-      //wait for 2 seconds to press ok, otherwise reset
-      setTimeout(() => {
-      window.location.reload(); 
-      }, 2000);
+     
 
     } catch (error) {
       console.error("Error updating order:", error.message);
