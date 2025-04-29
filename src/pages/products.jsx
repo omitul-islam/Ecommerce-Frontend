@@ -207,7 +207,7 @@ const ProductList = () => {
               ) : (
                 <>
                   <img
-                    src={`http://localhost:3000${product.image}`}
+                    src={`https://ecommerce-backend-wm9g.onrender.com${product.image}`}
                     alt={product.name}
                     className="w-full h-48 object-cover rounded mb-4"
                   />

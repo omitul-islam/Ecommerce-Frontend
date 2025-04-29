@@ -130,7 +130,7 @@ const OrderPage = () => {
                 {order.products.map((product, index) => (
                   <div key={index} className="flex items-center space-x-2">
                     <img
-                    src={`http://localhost:3000${product.productId.image}`}
+                    src={`https://ecommerce-backend-wm9g.onrender.com${product.productId.image}`}
                     alt={product.name}
                     className="w-18 h-18 object-cover rounded mb-4"
                     />
