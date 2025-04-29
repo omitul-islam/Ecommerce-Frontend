@@ -132,11 +132,13 @@ const OrderPage = () => {
                     alt={product.name}
                     className="w-18 h-18 object-cover rounded mb-4"
                     />
-                    <p className="text-gray-600">Product: {product.productId.name}</p>
-                    <p className="text-gray-600">Quantity: {product.quantity}</p>
-                    <p className="text-green-500 font-semibold">
+                      <div className="flex flex-col space-y-1">
+                      <p className="text-gray-600">Product: {product.productId.name}</p>
+                      <p className="text-gray-600">Quantity: {product.quantity}</p>
+                      <p className="text-green-500 font-semibold">
                       Price: ${(product.price || 0).toFixed(2)}
-                    </p>
+                      </p>
+                      </div>
                   </div>
                 ))}
               </div>
