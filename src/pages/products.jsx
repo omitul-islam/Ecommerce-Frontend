@@ -139,17 +139,17 @@ const ProductList = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center p-4 bg-gray-100 shadow-md">
-        <div className="relative">
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
-            {cartCount}
-          </span>
-          {localStorage.getItem('token') && (
-          <button className="text-gray-800 focus:outline-none" onClick={goToCart}>
-          🛒 Cart
-         </button>
-          )}
-        </div>
+        <div className="flex justify-between items-center p-4 bg-gray-100 shadow-md">
+        {localStorage.getItem('token') && (
+    <div className="relative">
+      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+        {cartCount}
+      </span>
+      <button className="text-gray-800 focus:outline-none" onClick={goToCart}>
+        🛒 Cart
+      </button>
+    </div>
+    )}
       </div>
 
       <div className="p-4">
