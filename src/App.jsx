@@ -70,10 +70,7 @@ function App() {
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
               onClick={() => {
-                setTimeout(() => {
-                  window.location.reload();
-                  navigate("/login"); 
-                 }, 2000);
+                navigate("/login");
               }}
             >
               Login
