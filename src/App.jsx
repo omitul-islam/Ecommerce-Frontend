@@ -70,7 +70,9 @@ function App() {
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
               onClick={() => {
-                navigate("/login");
+                setTimeout(() => {
+                  navigate("/login"); 
+                 }, 2000);
               }}
             >
               Login
@@ -82,7 +84,7 @@ function App() {
                 localStorage.removeItem("token");
                 setTimeout(() => {
                  navigate("/"); 
-                }, 1000);
+                }, 2000);
               }}
             >
               Logout
