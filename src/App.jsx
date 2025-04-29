@@ -15,6 +15,7 @@ function App() {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
 
+
   useEffect(() => {
     const loadUser = async () => {
       try {
@@ -81,7 +82,8 @@ function App() {
                 localStorage.removeItem("token");
                 setTimeout(() => {
                 window.location.reload();
-                }, 2000);
+                navigate('/');
+                }, 1000);
               }}
             >
               Logout
