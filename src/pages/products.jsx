@@ -22,6 +22,8 @@ const ProductList = () => {
 
   useEffect(() => {
     fetchProducts();
+    const token = localStorage.getItem("token");
+    if (!token) return;
     fetchCartCount();
     const loadUser = async () => {
           try {
